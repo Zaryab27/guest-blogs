@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quill & Craft — Guest Posting Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --parchment: #faf7f2;
+    --cream: #f3ede3;
+    --gold: #c8922a;
+    --gold-light: #e8b84b;
+    --rust: #b84c1e;
+    --sage: #4a6741;
+    --muted: #8a8070;
+    --line: rgba(15,14,12,0.12);
+    --card-bg: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--parchment);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    opacity: 0.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(250,247,242,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+
+  .nav-logo .dot { color: var(--gold); }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--ink);
+    color: var(--parchment) !important;
+    padding: 0.6rem 1.4rem;
+    border-radius: 2px;
+    transition: background 0.2s, color 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--gold) !important; color: var(--ink) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 5rem 4rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 2rem; height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 440px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 1rem 2.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    border: none; cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: background 0.25s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '→';
+    transition: transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--gold); color: var(--ink); }
+  .btn-primary:hover::after { transform: translateX(4px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--ink);
+    padding: 1rem 2.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1.5px solid var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { background: var(--ink); color: var(--parchment); }
+
+  .hero-stats {
+    display: flex; gap: 3rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.2rem;
+  }
+
+  /* ── HERO RIGHT ── */
+  .hero-right {
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse at 30% 40%, rgba(200,146,42,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(184,76,30,0.15) 0%, transparent 50%);
+  }
+
+  .hero-right-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 5rem 3rem;
+    z-index: 2;
+  }
+
+  .floating-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .floating-card:nth-child(2) { animation-delay: -2s; margin-left: 2rem; }
+  .floating-card:nth-child(3) { animation-delay: -4s; margin-left: 1rem; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .fc-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 0.6rem;
+  }
+
+  .fc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .fc-meta {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 1rem;
+  }
+
+  .fc-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-section {
+    background: var(--gold);
+    padding: 0.9rem 0;
+    overflow: hidden;
+    position: relative; z-index: 2;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 25s linear infinite;
+    gap: 4rem;
+  }
+
+  .marquee-track span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .marquee-track span::before { content: '✦ '; opacity: 0.6; }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 1.5rem; height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-it-works {
+    padding: 7rem 4rem;
+    background: var(--cream);
+  }
+
+  .hiw-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+    align-items: end;
+  }
+
+  .hiw-desc {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 2.5rem;
+    left: 12.5%;
+    right: 12.5%;
+    height: 1px;
+    background: var(--line);
+    z-index: 0;
+  }
+
+  .step {
+    padding: 0 1.5rem;
+    position: relative; z-index: 1;
+    transition: transform 0.3s;
+  }
+
+  .step:hover { transform: translateY(-6px); }
+
+  .step-num {
+    width: 5rem; height: 5rem;
+    background: var(--parchment);
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .step:hover .step-num {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--gold-light);
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── CATEGORIES ── */
+  .categories {
+    padding: 7rem 4rem;
+  }
+
+  .cat-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--line);
+    border: 1.5px solid var(--line);
+  }
+
+  .cat-card {
+    background: var(--parchment);
+    padding: 2.5rem;
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cat-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--ink);
+    transition: height 0.3s;
+    z-index: 0;
+  }
+
+  .cat-card:hover::before { height: 100%; }
+
+  .cat-card > * { position: relative; z-index: 1; }
+
+  .cat-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+    transition: transform 0.3s;
+  }
+
+  .cat-card:hover .cat-icon { transform: scale(1.15) rotate(-5deg); }
+
+  .cat-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+  }
+
+  .cat-card:hover .cat-name { color: var(--parchment); }
+
+  .cat-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+  }
+
+  .cat-card:hover .cat-count { color: rgba(250,247,242,0.6); }
+
+  .cat-arrow {
+    position: absolute;
+    bottom: 1.5rem; right: 1.5rem;
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: translate(-8px, 8px);
+    transition: opacity 0.3s, transform 0.3s;
+    color: var(--gold-light);
+    z-index: 1;
+  }
+
+  .cat-card:hover .cat-arrow { opacity: 1; transform: translate(0, 0); }
+
+  /* ── FEATURED POSTS ── */
+  .featured {
+    padding: 7rem 4rem;
+    background: var(--cream);
+  }
+
+  .featured-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 3rem;
+  }
+
+  .view-all {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.4rem;
+    border-bottom: 1px solid var(--muted);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .view-all:hover { color: var(--gold); border-color: var(--gold); }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5px;
+    background: var(--line);
+    border: 1.5px solid var(--line);
+  }
+
+  .post-card {
+    background: var(--card-bg);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .post-card:first-child {
+    grid-row: 1 / 3;
+  }
+
+  .post-card-inner {
+    padding: 2.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+  }
+
+  .post-card:first-child .post-card-inner {
+    min-height: 480px;
+    background: linear-gradient(to top, rgba(15,14,12,0.85) 0%, transparent 60%);
+    background-color: #1a1a14;
+  }
+
+  .post-card:first-child .post-card-inner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 70%, rgba(200,146,42,0.2), transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext y='40' font-size='40' opacity='0.03'%3E✍%3C/text%3E%3C/svg%3E");
+    z-index: 0;
+  }
+
+  .post-card:first-child .post-card-inner > * { position: relative; z-index: 1; }
+
+  .post-tag {
+    display: inline-flex;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 1rem;
+    width: fit-content;
+  }
+
+  .post-card:first-child .post-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .post-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  .post-card:first-child .post-meta { color: rgba(255,255,255,0.55); }
+
+  .post-meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 1rem;
+  }
+
+  .post-card:not(:first-child) .post-card-inner {
+    justify-content: flex-start;
+  }
+
+  .post-divider {
+    width: 2rem; height: 1px;
+    background: var(--line);
+    margin: 1rem 0;
+  }
+
+  .post-excerpt {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+
+  .post-card:hover {
+    background: var(--parchment);
+  }
+
+  /* ── SUBMIT SECTION ── */
+  .submit-section {
+    padding: 7rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .submit-text .section-title { margin-bottom: 1.5rem; }
+
+  .submit-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+
+  .requirements-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .requirements-list li {
+    display: flex; align-items: flex-start; gap: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .req-check {
+    width: 1.4rem; height: 1.4rem;
+    background: var(--sage);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  /* ── FORM ── */
+  .submit-form {
+    background: var(--ink);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-form::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(200,146,42,0.15), transparent 60%);
+    pointer-events: none;
+  }
+
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 2.5rem;
+  }
+
+  .form-group { margin-bottom: 1.2rem; position: relative; }
+
+  .form-group label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+    padding: 0.9rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    appearance: none;
+    border-radius: 0;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.25); }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.09);
+  }
+
+  .form-group textarea { resize: vertical; min-height: 100px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .form-submit {
+    width: 100%;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 1.1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 0.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+
+  .form-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials {
+    padding: 7rem 4rem;
+    background: var(--cream);
+  }
+
+  .test-header { text-align: center; margin-bottom: 4rem; }
+
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .test-card {
+    background: var(--parchment);
+    padding: 2.5rem;
+    border: 1px solid var(--line);
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .test-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(15,14,12,0.08);
+  }
+
+  .test-quote {
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .test-text {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .test-author {
+    display: flex; align-items: center; gap: 1rem;
+  }
+
+  .test-avatar {
+    width: 3rem; height: 3rem;
+    border-radius: 50%;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .test-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .test-role {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.7);
+    padding: 5rem 4rem 2.5rem;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .footer-brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .footer-brand-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    max-width: 260px;
+    margin-bottom: 2rem;
+  }
+
+  .footer-col-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+
+  .footer-links a {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.25s; }
+  .fade-up:nth-child(3) { animation-delay: 0.4s; }
+  .fade-up:nth-child(4) { animation-delay: 0.55s; }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 2rem; }
+    .nav-links { gap: 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hiw-header, .submit-section { grid-template-columns: 1fr; gap: 2rem; }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid::before { display: none; }
+    .cat-grid, .test-grid { grid-template-columns: repeat(2, 1fr); }
+    .posts-grid { grid-template-columns: 1fr 1fr; }
+    .posts-grid .post-card:first-child { grid-column: 1 / -1; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero-left { padding: 7rem 1.5rem 4rem; }
+    .how-it-works, .categories, .featured, .submit-section, .testimonials { padding: 4rem 1.5rem; }
+    .steps-grid, .cat-grid, .test-grid, .posts-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    footer { padding: 3rem 1.5rem 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Quill<span class="dot">&</span>Craft</div>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#categories">Topics</a></li>
+    <li><a href="#featured">Articles</a></li>
+    <li><a href="#submit" class="nav-cta">Submit Post</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow fade-up">Guest Posting Platform</div>
+    <h1 class="hero-headline fade-up">
+      Your words<br>deserve a<br><em>grand stage.</em>
+    </h1>
+    <p class="hero-sub fade-up">Share your expertise with a discerning audience of readers, creators, and thinkers. Publish on Quill & Craft and let your ideas travel far.</p>
+    <div class="hero-actions fade-up">
+      <a href="#submit" class="btn-primary">Submit Your Post</a>
+      <a href="#featured" class="btn-outline">Read Articles</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">48K</div>
+        <div class="stat-label">Monthly Readers</div>
+      </div>
+      <div>
+        <div class="stat-num">1,200+</div>
+        <div class="stat-label">Published Authors</div>
+      </div>
+      <div>
+        <div class="stat-num">95%</div>
+        <div class="stat-label">Acceptance Rate</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-inner">
+      <div class="floating-card">
+        <div class="fc-tag">Technology</div>
+        <div class="fc-title">The Future of Human-AI Collaboration in the Workplace</div>
+        <div class="fc-meta"><span class="fc-avatar">MK</span> Maya K. · 8 min read</div>
+      </div>
+      <div class="floating-card">
+        <div class="fc-tag">Design</div>
+        <div class="fc-title">Why Brutalism in Web Design Is Making a Comeback</div>
+        <div class="fc-meta"><span class="fc-avatar">JR</span> James R. · 5 min read</div>
+      </div>
+      <div class="floating-card">
+        <div class="fc-tag">Business</div>
+        <div class="fc-title">Lessons I Learned from Growing a Newsletter to 50K</div>
+        <div class="fc-meta"><span class="fc-avatar">SL</span> Sara L. · 6 min read</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>Technology</span><span>Design</span><span>Business</span><span>Culture</span>
+    <span>Travel</span><span>Health</span><span>Finance</span><span>Science</span>
+    <span>Lifestyle</span><span>Writing</span><span>Marketing</span><span>Education</span>
+    <span>Technology</span><span>Design</span><span>Business</span><span>Culture</span>
+    <span>Travel</span><span>Health</span><span>Finance</span><span>Science</span>
+    <span>Lifestyle</span><span>Writing</span><span>Marketing</span><span>Education</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how">
+  <div class="hiw-header">
+    <div>
+      <div class="section-label">Process</div>
+      <h2 class="section-title">From draft to<br>published — simply.</h2>
+    </div>
+    <p class="hiw-desc">Our editorial process is designed to be fast, fair, and frictionless. We review every submission personally and respond within 3 business days.</p>
+  </div>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3 class="step-title">Submit Your Pitch</h3>
+      <p class="step-desc">Fill out our submission form with your topic, angle, and a brief outline. No full draft required at this stage.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3 class="step-title">Editorial Review</h3>
+      <p class="step-desc">Our editors review your pitch for fit, originality, and value to our readers. Response within 3 business days.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3 class="step-title">Refine & Polish</h3>
+      <p class="step-desc">If approved, collaborate with our team to perfect your piece — structure, clarity, and style all considered.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3 class="step-title">Go Live</h3>
+      <p class="step-desc">Your article is published and promoted across our channels. You receive a full author profile and byline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div class="cat-header">
+    <div class="section-label" style="justify-content:center">Topics</div>
+    <h2 class="section-title">Write about what<br>you know best.</h2>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card">
+      <span class="cat-icon">💻</span>
+      <div class="cat-name">Technology</div>
+      <div class="cat-count">247 articles</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🎨</span>
+      <div class="cat-name">Design & UX</div>
+      <div class="cat-count">183 articles</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">📈</span>
+      <div class="cat-name">Business</div>
+      <div class="cat-count">321 articles</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🌍</span>
+      <div class="cat-name">Culture & Society</div>
+      <div class="cat-count">156 articles</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🧬</span>
+      <div class="cat-name">Science & Health</div>
+      <div class="cat-count">209 articles</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">✍️</span>
+      <div class="cat-name">Writing & Craft</div>
+      <div class="cat-count">94 articles</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED POSTS -->
+<section class="featured" id="featured">
+  <div class="featured-header">
+    <div>
+      <div class="section-label">Featured</div>
+      <h2 class="section-title">Recently published.</h2>
+    </div>
+    <a href="#" class="view-all">View all articles →</a>
+  </div>
+  <div class="posts-grid">
+    <div class="post-card">
+      <div class="post-card-inner">
+        <span class="post-tag">Technology</span>
+        <h3 class="post-title">The Future of Human-AI Collaboration in the Modern Workplace</h3>
+        <div class="post-meta">
+          <span>Maya K.</span>
+          <span>·</span>
+          <span>8 min read</span>
+          <span>·</span>
+          <span>May 2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="post-card">
+      <div class="post-card-inner">
+        <span class="post-tag">Design</span>
+        <h3 class="post-title">Why Brutalism in Web Design Is Making a Comeback</h3>
+        <div class="post-divider"></div>
+        <p class="post-excerpt">An exploration of raw aesthetics and why the internet is falling in love with stark, structural beauty again.</p>
+        <div class="post-meta"><span>James R.</span><span>·</span><span>5 min</span></div>
+      </div>
+    </div>
+    <div class="post-card">
+      <div class="post-card-inner">
+        <span class="post-tag">Business</span>
+        <h3 class="post-title">Lessons from Growing a Newsletter to 50,000 Subscribers</h3>
+        <div class="post-divider"></div>
+        <p class="post-excerpt">Practical, hard-won insights on content strategy, audience building, and sustainable monetization.</p>
+        <div class="post-meta"><span>Sara L.</span><span>·</span><span>6 min</span></div>
+      </div>
+    </div>
+    <div class="post-card">
+      <div class="post-card-inner">
+        <span class="post-tag">Science</span>
+        <h3 class="post-title">What Sleep Research Tells Us About Creative Thinking</h3>
+        <div class="post-divider"></div>
+        <p class="post-excerpt">New neuroscience suggests the way we rest may be the most powerful productivity hack available.</p>
+        <div class="post-meta"><span>Dr. Anita V.</span><span>·</span><span>7 min</span></div>
+      </div>
+    </div>
+    <div class="post-card">
+      <div class="post-card-inner">
+        <span class="post-tag">Culture</span>
+        <h3 class="post-title">The Slow Travel Movement: Why Less Is More</h3>
+        <div class="post-divider"></div>
+        <p class="post-excerpt">Trading itinerary-chasing for depth, presence, and genuine connection with places and people.</p>
+        <div class="post-meta"><span>Carlos M.</span><span>·</span><span>4 min</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBMIT SECTION -->
+<section class="submit-section" id="submit">
+  <div class="submit-text">
+    <div class="section-label">Contribute</div>
+    <h2 class="section-title">Share your<br>expertise with<br>the world.</h2>
+    <p>We welcome thoughtful, original writing from experts, practitioners, and passionate voices across every field. If you have something worth saying, we want to read it.</p>
+    <ul class="requirements-list">
+      <li>
+        <span class="req-check">✓</span>
+        <span>Original content not published elsewhere — we champion fresh perspectives and ideas.</span>
+      </li>
+      <li>
+        <span class="req-check">✓</span>
+        <span>800–3,000 words — long enough to go deep, short enough to respect readers' time.</span>
+      </li>
+      <li>
+        <span class="req-check">✓</span>
+        <span>Backed by evidence, experience, or genuine insight — not generic advice.</span>
+      </li>
+      <li>
+        <span class="req-check">✓</span>
+        <span>One relevant link to your own work or business — we support authors' visibility.</span>
+      </li>
+    </ul>
+    <a href="#" class="btn-primary">Download Guidelines</a>
+  </div>
+
+  <div class="submit-form">
+    <h3 class="form-title">Submit a Pitch</h3>
+    <p class="form-subtitle">No full draft needed — just your idea and angle.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="Jane">
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Doe">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" placeholder="jane@example.com">
+    </div>
+    <div class="form-group">
+      <label>Topic Category</label>
+      <select>
+        <option value="" disabled selected>Select a category</option>
+        <option>Technology</option>
+        <option>Design & UX</option>
+        <option>Business</option>
+        <option>Culture & Society</option>
+        <option>Science & Health</option>
+        <option>Writing & Craft</option>
+        <option>Finance</option>
+        <option>Travel</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Article Title</label>
+      <input type="text" placeholder="Your proposed headline">
+    </div>
+    <div class="form-group">
+      <label>Pitch / Brief Outline</label>
+      <textarea placeholder="Tell us the angle, the main argument, and why your readers will care..."></textarea>
+    </div>
+    <button class="form-submit">
+      <span>Submit Pitch</span>
+      <span>→</span>
+    </button>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="test-header">
+    <div class="section-label" style="justify-content:center">Voices</div>
+    <h2 class="section-title">What our authors say.</h2>
+  </div>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-quote">"</div>
+      <p class="test-text">Publishing on Quill & Craft doubled my newsletter subscribers in a single week. The editorial team is thoughtful, responsive, and genuinely cares about your work.</p>
+      <div class="test-author">
+        <div class="test-avatar">MK</div>
+        <div>
+          <div class="test-name">Maya Krishnan</div>
+          <div class="test-role">AI Researcher & Author</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote">"</div>
+      <p class="test-text">The acceptance process was refreshingly human. They asked great questions, pushed my thinking, and the final piece was so much better for it.</p>
+      <div class="test-author">
+        <div class="test-avatar">JR</div>
+        <div>
+          <div class="test-name">James Rodwell</div>
+          <div class="test-role">Design Lead, Halo Studio</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote">"</div>
+      <p class="test-text">I've contributed to a dozen platforms, but none match the quality of readership here. Comments are thoughtful, shares are genuine, and the traffic is real.</p>
+      <div class="test-author">
+        <div class="test-avatar">SL</div>
+        <div>
+          <div class="test-name">Sara Liu</div>
+          <div class="test-role">Growth Strategist</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">Quill & Craft</div>
+      <p class="footer-brand-desc">A platform for writers and thinkers to share original ideas with a curious, engaged audience.</p>
+      <div style="display:flex;gap:1rem">
+        <a href="#" style="color:rgba(255,255,255,0.4);font-size:1.2rem;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#c8922a'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">𝕏</a>
+        <a href="#" style="color:rgba(255,255,255,0.4);font-size:1.2rem;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#c8922a'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">in</a>
+        <a href="#" style="color:rgba(255,255,255,0.4);font-size:1.2rem;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#c8922a'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">@</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Submit a Post</a></li>
+        <li><a href="#">Editorial Guidelines</a></li>
+        <li><a href="#">Author Profiles</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Topics</div>
+      <ul class="footer-links">
+        <li><a href="#">Technology</a></li>
+        <li><a href="#">Design</a></li>
+        <li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li>
+        <li><a href="#">Culture</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Advertise</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Quill & Craft. All rights reserved.</span>
+    <span>Crafted with intention.</span>
+  </div>
+</footer>
+
+</body>
+</html>
