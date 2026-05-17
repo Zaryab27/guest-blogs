@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Write For Us — QuickCraft Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --parchment: #faf7f2;
+    --cream: #f3ede3;
+    --gold: #c8922a;
+    --gold-light: #e8b84b;
+    --rust: #b84c1e;
+    --sage: #4a6741;
+    --muted: #8a8070;
+    --line: rgba(15,14,12,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--parchment);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--gold) !important;
+    color: var(--ink) !important;
+    padding: 0.6rem 1.4rem;
+  }
+
+  /* HERO */
+  .page-hero {
+    padding: 10rem 4rem 5rem;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .page-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, rgba(200,146,42,0.2), transparent 70%);
+  }
+
+  .page-hero::after {
+    content: '✍';
+    position: absolute;
+    font-size: 20rem;
+    opacity: 0.03;
+    bottom: -2rem;
+    right: 5%;
+    line-height: 1;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    position: relative; z-index: 1;
+  }
+
+  .hero-tag::before, .hero-tag::after {
+    content: '';
+    width: 2rem; height: 1px;
+    background: var(--gold);
+  }
+
+  .page-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+  }
+
+  .page-hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .page-hero p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    font-weight: 300;
+    position: relative; z-index: 1;
+  }
+
+  .hero-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 1rem 2.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    position: relative; z-index: 1;
+  }
+
+  .hero-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  /* BENEFITS */
+  .benefits {
+    padding: 6rem 4rem;
+    background: var(--cream);
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 1.5rem; height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .benefit-card {
+    background: var(--parchment);
+    padding: 2.5rem;
+    border: 1px solid var(--line);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(15,14,12,0.08);
+  }
+
+  .benefit-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .benefit-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .benefit-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* GUIDELINES */
+  .guidelines {
+    padding: 6rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .guide-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .guide-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem;
+    border: 1px solid var(--line);
+    background: var(--cream);
+    transition: border-color 0.2s;
+  }
+
+  .guide-item:hover { border-color: var(--gold); }
+
+  .guide-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    font-weight: 500;
+    min-width: 2rem;
+    margin-top: 0.1rem;
+  }
+
+  .guide-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .guide-text strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  /* TOPICS */
+  .topics-box {
+    background: var(--ink);
+    padding: 2.5rem;
+    margin-top: 2rem;
+  }
+
+  .topics-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+
+  .topic-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .topic-tag {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.8);
+    padding: 0.4rem 1rem;
+    font-size: 0.82rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, color 0.2s;
+    cursor: default;
+  }
+
+  .topic-tag:hover {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+  }
+
+  .not-accepted {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .not-accepted-title {
+    font-size: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.75rem;
+  }
+
+  .not-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.4rem;
+  }
+
+  .not-list li {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+
+  .not-list li::before { content: '✕'; color: var(--rust); font-size: 0.7rem; }
+
+  /* PROCESS */
+  .process {
+    padding: 6rem 4rem;
+    background: var(--cream);
+  }
+
+  .process-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    position: relative;
+  }
+
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .p-step {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .p-step-num {
+    width: 4rem; height: 4rem;
+    background: var(--parchment);
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 0 auto 1.2rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .p-step:hover .p-step-num {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+
+  .p-step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .p-step-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* FORM */
+  .submit-form-section {
+    padding: 6rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .form-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+    letter-spacing: -0.02em;
+  }
+
+  .form-info p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  .contact-direct {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .contact-icon {
+    width: 3rem; height: 3rem;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .contact-email {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* FORM STYLES */
+  .wfu-form {
+    background: var(--ink);
+    padding: 3rem;
+  }
+
+  .wfu-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .wfu-form .sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2rem;
+  }
+
+  .form-group { margin-bottom: 1.2rem; }
+
+  .form-group label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+    padding: 0.9rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    appearance: none;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+
+  .form-group textarea { resize: vertical; min-height: 110px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .char-note {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.3);
+    margin-top: 0.4rem;
+  }
+
+  .form-submit {
+    width: 100%;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 1.1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 0.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+
+  .form-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .form-note {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+
+  /* FAQ */
+  .faq {
+    padding: 6rem 4rem;
+    background: var(--cream);
+  }
+
+  .faq-header { text-align: center; margin-bottom: 3rem; }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5px;
+    background: var(--line);
+    border: 1.5px solid var(--line);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    background: var(--parchment);
+    padding: 2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .faq-item:hover { background: #fff; }
+
+  .faq-q {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  }
+
+  .faq-q::after {
+    content: '+';
+    color: var(--gold);
+    font-size: 1.3rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .faq-a {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    padding: 3rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .footer-logo span { color: var(--gold); }
+
+  footer p { font-size: 0.8rem; }
+
+  footer a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+
+  footer a:hover { color: var(--gold); }
+
+  /* SUCCESS MSG */
+  .success-msg {
+    display: none;
+    background: var(--sage);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 2rem; }
+    .benefits-grid { grid-template-columns: 1fr 1fr; }
+    .guidelines { grid-template-columns: 1fr; gap: 3rem; }
+    .process-steps { grid-template-columns: repeat(2,1fr); }
+    .process-steps::before { display: none; }
+    .submit-form-section { grid-template-columns: 1fr; gap: 3rem; }
+    .faq-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .page-hero, .benefits, .guidelines, .process, .submit-form-section, .faq { padding: 4rem 1.5rem; }
+    .page-hero { padding-top: 8rem; }
+    .benefits-grid, .process-steps { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">QuickCraft<span>Blog</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#">Articles</a></li>
+    <li><a href="#">Topics</a></li>
+    <li><a href="write-for-us.html" class="active">Write For Us</a></li>
+    <li><a href="#submit-form" class="nav-cta">Submit Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-tag">Contribute</div>
+  <h1>Write for<br><em>QuickCraft Blog</em></h1>
+  <p>Share your expertise in Technology & Digital Marketing with thousands of professionals, entrepreneurs, and digital creators.</p>
+  <a href="#submit-form" class="hero-btn">Submit Your Article →</a>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <div class="section-label">Why Write With Us</div>
+  <h2 class="section-title">What you gain as<br>a guest author.</h2>
+  <div class="benefits-grid">
+    <div class="benefit-card">
+      <span class="benefit-icon">👁️</span>
+      <h3 class="benefit-title">Massive Exposure</h3>
+      <p class="benefit-desc">Your article reaches thousands of readers in the tech and digital marketing space every month. Real audience, real eyeballs.</p>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">🔗</span>
+      <h3 class="benefit-title">Do-Follow Backlink</h3>
+      <p class="benefit-desc">Get one quality do-follow backlink to your website or business. Boost your SEO and domain authority with every published post.</p>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">✍️</span>
+      <h3 class="benefit-title">Author Profile</h3>
+      <p class="benefit-desc">Your own author bio, photo, and profile page on our site. Build your personal brand and establish yourself as an industry expert.</p>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">📣</span>
+      <h3 class="benefit-title">Social Promotion</h3>
+      <p class="benefit-desc">We promote every published article on our social media channels — giving you extra reach beyond our website traffic.</p>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">🤝</span>
+      <h3 class="benefit-title">Network Growth</h3>
+      <p class="benefit-desc">Connect with other writers, founders, and digital marketers in our community. Collaboration opportunities await.</p>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">⚡</span>
+      <h3 class="benefit-title">Fast Review</h3>
+      <p class="benefit-desc">We respond to every submission within 3 business days. No waiting weeks in the dark — we respect your time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GUIDELINES -->
+<section class="guidelines">
+  <div>
+    <div class="section-label">Guidelines</div>
+    <h2 class="section-title">What we're<br>looking for.</h2>
+    <ul class="guide-list">
+      <li class="guide-item">
+        <span class="guide-num">01</span>
+        <span class="guide-text"><strong>Original Content Only</strong>Not published anywhere else — no reposts, no AI-generated spam. Fresh, genuine writing only.</span>
+      </li>
+      <li class="guide-item">
+        <span class="guide-num">02</span>
+        <span class="guide-text"><strong>800 – 2,500 Words</strong>Long enough to be valuable, short enough to hold attention. In-depth is always better.</span>
+      </li>
+      <li class="guide-item">
+        <span class="guide-num">03</span>
+        <span class="guide-text"><strong>Actionable & Practical</strong>Readers should learn something useful. Tips, strategies, case studies, and how-tos perform best.</span>
+      </li>
+      <li class="guide-item">
+        <span class="guide-num">04</span>
+        <span class="guide-text"><strong>One Backlink Allowed</strong>You may include one relevant link to your own website or business — no spammy links.</span>
+      </li>
+      <li class="guide-item">
+        <span class="guide-num">05</span>
+        <span class="guide-text"><strong>Proper Formatting</strong>Use clear headings (H2, H3), short paragraphs, bullet points where needed, and no keyword stuffing.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <div class="section-label">Topics</div>
+    <h2 class="section-title">We accept<br>these topics.</h2>
+    <div class="topics-box">
+      <h3 class="topics-title">✅ Accepted Topics</h3>
+      <div class="topic-tags">
+        <span class="topic-tag">SEO & Search</span>
+        <span class="topic-tag">Content Marketing</span>
+        <span class="topic-tag">Social Media</span>
+        <span class="topic-tag">Email Marketing</span>
+        <span class="topic-tag">PPC & Ads</span>
+        <span class="topic-tag">Web Development</span>
+        <span class="topic-tag">AI & Automation</span>
+        <span class="topic-tag">Blogging Tips</span>
+        <span class="topic-tag">E-commerce</span>
+        <span class="topic-tag">Cybersecurity</span>
+        <span class="topic-tag">WordPress</span>
+        <span class="topic-tag">Affiliate Marketing</span>
+        <span class="topic-tag">Startup & Growth</span>
+        <span class="topic-tag">Analytics & Data</span>
+        <span class="topic-tag">Mobile Apps</span>
+        <span class="topic-tag">Cloud Computing</span>
+      </div>
+      <div class="not-accepted">
+        <div class="not-accepted-title">✕ Not Accepted</div>
+        <ul class="not-list">
+          <li>Casino, gambling, or adult content</li>
+          <li>Duplicate or AI-generated content</li>
+          <li>Overly promotional / sales pitch articles</li>
+          <li>Topics unrelated to tech or digital marketing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-header">
+    <div class="section-label" style="justify-content:center">Process</div>
+    <h2 class="section-title">How it works.</h2>
+  </div>
+  <div class="process-steps">
+    <div class="p-step">
+      <div class="p-step-num">1</div>
+      <h3 class="p-step-title">Submit Form</h3>
+      <p class="p-step-desc">Fill out the submission form below with your details, topic, and article draft or outline.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-step-num">2</div>
+      <h3 class="p-step-title">We Review</h3>
+      <p class="p-step-desc">Our editorial team reviews your submission within 3 business days and responds via email.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-step-num">3</div>
+      <h3 class="p-step-title">Final Edit</h3>
+      <p class="p-step-desc">If approved, we may request minor edits. We'll collaborate to make your article shine.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-step-num">4</div>
+      <h3 class="p-step-title">Go Live!</h3>
+      <p class="p-step-desc">Your article gets published with your author bio and backlink. We promote it on social media.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SUBMIT FORM -->
+<section class="submit-form-section" id="submit-form">
+  <div class="form-info">
+    <div class="section-label">Submit</div>
+    <h2>Ready to share<br>your expertise?</h2>
+    <p>Fill out the form and we'll get back to you within 3 business days. You can send a full article or just an outline — both are welcome!</p>
+    <div class="contact-direct">
+      <div class="contact-icon">✉️</div>
+      <div>
+        <div class="contact-label">Direct Email</div>
+        <div class="contact-email">guestpost947@gmail.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wfu-form">
+    <h3>Submit Your Article</h3>
+    <p class="sub">All fields marked * are required.</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name *</label>
+        <input type="text" id="fname" placeholder="John">
+      </div>
+      <div class="form-group">
+        <label>Last Name *</label>
+        <input type="text" id="lname" placeholder="Doe">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email Address *</label>
+      <input type="email" id="email" placeholder="john@example.com">
+    </div>
+
+    <div class="form-group">
+      <label>Your Website / Portfolio</label>
+      <input type="url" id="website" placeholder="https://yourwebsite.com">
+    </div>
+
+    <div class="form-group">
+      <label>Article Topic / Category *</label>
+      <select id="topic">
+        <option value="" disabled selected>Select a topic</option>
+        <option>SEO & Search</option>
+        <option>Content Marketing</option>
+        <option>Social Media Marketing</option>
+        <option>Email Marketing</option>
+        <option>PPC & Paid Ads</option>
+        <option>Web Development</option>
+        <option>AI & Automation</option>
+        <option>Blogging Tips</option>
+        <option>E-commerce</option>
+        <option>Cybersecurity</option>
+        <option>Affiliate Marketing</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Article Title *</label>
+      <input type="text" id="title" placeholder="Your proposed article headline">
+    </div>
+
+    <div class="form-group">
+      <label>Article / Outline *</label>
+      <textarea id="content" placeholder="Paste your full article or a brief outline here. Tell us the main points you'll cover and what value readers will get..."></textarea>
+      <div class="char-note">Minimum 150 characters for outline. Full article preferred.</div>
+    </div>
+
+    <div class="form-group">
+      <label>Backlink URL (optional)</label>
+      <input type="url" id="backlink" placeholder="https://page-you-want-linked.com">
+    </div>
+
+    <button class="form-submit" onclick="handleSubmit()">
+      <span>Submit Article</span>
+      <span>→</span>
+    </button>
+
+    <div class="success-msg" id="successMsg">
+      ✅ Thank you! We'll review your submission and respond within 3 business days.
+    </div>
+
+    <p class="form-note">By submitting, you confirm this is original content not published elsewhere. We do not accept AI-generated articles.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-header">
+    <div class="section-label" style="justify-content:center">FAQ</div>
+    <h2 class="section-title">Common questions.</h2>
+  </div>
+  <div class="faq-grid">
+    <div class="faq-item">
+      <div class="faq-q">Is guest posting free?</div>
+      <p class="faq-a">Yes! Submitting and publishing a guest post on QuickCraft Blog is completely free. We do not charge any fees.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How long before I get a response?</div>
+      <p class="faq-a">We review all submissions within 3 business days and respond to every email, whether accepted or not.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I include links in my article?</div>
+      <p class="faq-a">You may include one do-follow backlink to your own website. Internal links to relevant content on our blog are also welcome.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you accept previously published content?</div>
+      <p class="faq-a">No. We only accept 100% original content that has not been published on any other website, blog, or platform.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I submit more than one article?</div>
+      <p class="faq-a">Absolutely! Once your first article is published, you are welcome to submit more. Regular contributors get priority review.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Will you edit my article?</div>
+      <p class="faq-a">We may make minor edits for clarity, formatting, or grammar. Major changes will always be discussed with you first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">QuickCraft<span>Blog</span></div>
+  <p>© 2026 QuickCraftBlog. All rights reserved.</p>
+  <div style="display:flex;gap:1.5rem">
+    <a href="index.html">Home</a>
+    <a href="write-for-us.html">Write For Us</a>
+    <a href="mailto:guestpost947@gmail.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function handleSubmit() {
+    const fname = document.getElementById('fname').value;
+    const email = document.getElementById('email').value;
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+    const topic = document.getElementById('topic').value;
+
+    if (!fname || !email || !title || !content || !topic) {
+      alert('Please fill in all required fields!');
+      return;
+    }
+
+    if (content.length < 150) {
+      alert('Please write a longer outline or article (minimum 150 characters).');
+      return;
+    }
+
+    // Show success message
+    document.getElementById('successMsg').style.display = 'block';
+    
+    // Scroll to success
+    document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
